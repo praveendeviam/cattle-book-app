@@ -1,23 +1,22 @@
 # CattleBook
 
-Offline-first dairy ledger Android app for tracking milk sales and payments.
+A simple Android app I built for a dairy farmer to replace their paper diary. Tracks daily milk (morning + evening), calculates earnings, and handles settlement payments.
 
-## Features
+Works fully offline. Data is backed up automatically via Google Auto Backup.
 
-- Log morning and evening milk litres
-- Edit and delete entries
-- Date-range milk summary with earnings calculator
-- Record settlement payments (litres × rate auto-calculation)
-- Payment history
-- Optional PIN lock
-- Google Auto Backup to Drive
+## What it does
 
-## Tech Stack
+- Add morning/evening milk entries with litres
+- Edit or delete any entry
+- Pick a date range and see total milk + earnings
+- Record settlements — just enter the rate, it calculates the amount
+- View payment history
+- Optional PIN lock if you don't want others opening it
 
-- Kotlin + Jetpack Compose
-- Room (SQLite)
-- Hilt (dependency injection)
+## Stack
 
-## Build
+Kotlin, Jetpack Compose, Room, Hilt
 
-Open in Android Studio and run on a device or emulator running Android 8.0+.
+## Running it
+
+Open in Android Studio, connect a device or start an emulator (Android 8.0+), and hit run.
