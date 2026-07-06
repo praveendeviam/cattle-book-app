@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 11 and below: backs up Room DB + DataStore prefs to Google Drive -->
+<full-backup-content>
+    <include domain="database" path="cattlebook.db" />
+    <include domain="database" path="cattlebook.db-shm" />
+    <include domain="database" path="cattlebook.db-wal" />
+    <include domain="file" path="datastore/cattlebook_prefs.preferences_pb" />
+</full-backup-content>
