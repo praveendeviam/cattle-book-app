@@ -20,12 +20,23 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pd.labs.cattlebook.app
 import com.pd.labs.cattlebook.data.db.entity.MilkEntry
 import com.pd.labs.cattlebook.data.db.entity.MilkSession
+import com.pd.labs.cattlebook.ui.theme.Amber100
+import com.pd.labs.cattlebook.ui.theme.Amber700
 import com.pd.labs.cattlebook.ui.theme.Green100
 import com.pd.labs.cattlebook.ui.theme.Green700
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 private val DateFmt = DateTimeFormatter.ofPattern("d MMM yyyy")
+
+private fun LocalDate.toDisplayLabel(): String {
+    val today = LocalDate.now()
+    return when (this) {
+        today -> "Today"
+        today.minusDays(1) -> "Yesterday"
+        else -> this.format(DateFmt)
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,6 +66,13 @@ fun HistoryScreen(
         )
     }
 
+    val groupedByDate = remember(entries) {
+        entries
+            .groupBy { LocalDate.ofEpochDay(it.date) }
+            .entries
+            .sortedByDescending { (date, _) -> date }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,24 +88,54 @@ fun HistoryScreen(
 
         if (entries.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(
-                    "No milk entries yet",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Icon(
+                        Icons.Default.WaterDrop,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f),
+                        modifier = Modifier.size(56.dp)
+                    )
+                    Text(
+                        "No milk entries yet",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
+                    )
+                }
             }
         } else {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
             ) {
-                items(entries, key = { it.id }) { entry ->
-                    MilkCard(
-                        entry = entry,
-                        onEdit = { onEditMilk(entry.id) },
-                        onDelete = { entryToDelete = entry }
-                    )
+                groupedByDate.forEach { (date, dayEntries) ->
+                    stickyHeader(key = "header_$date") {
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.background
+                        ) {
+                            Text(
+                                text = date.toDisplayLabel(),
+                                style = MaterialTheme.typography.labelLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                                modifier = Modifier.padding(top = 12.dp, bottom = 6.dp)
+                            )
+                        }
+                    }
+                    val sorted = dayEntries.sortedByDescending {
+                        if (it.session == MilkSession.EVENING) 1 else 0
+                    }
+                    items(sorted, key = { it.id }) { entry ->
+                        MilkCard(
+                            entry = entry,
+                            onEdit = { onEditMilk(entry.id) },
+                            onDelete = { entryToDelete = entry }
+                        )
+                        Spacer(Modifier.height(8.dp))
+                    }
                 }
             }
         }
@@ -96,50 +144,65 @@ fun HistoryScreen(
 
 @Composable
 private fun MilkCard(entry: MilkEntry, onEdit: () -> Unit, onDelete: () -> Unit) {
+    val isMorning = entry.session == MilkSession.MORNING
+
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Green100)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
-            Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                Icons.Default.WaterDrop,
-                contentDescription = "Milk",
-                tint = Green700,
-                modifier = Modifier.size(26.dp)
+            // Session indicator
+            Surface(
+                color = if (isMorning) Amber100 else Green100,
+                shape = MaterialTheme.shapes.small
+            ) {
+                Text(
+                    text = if (isMorning) "Morning" else "Evening",
+                    color = if (isMorning) Amber700 else Green700,
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                )
+            }
+
+            Spacer(Modifier.width(12.dp))
+
+            // Litres — primary info
+            Text(
+                "${"%.1f".format(entry.litres)} L",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.weight(1f)
             )
-            Spacer(Modifier.width(10.dp))
-            Column(Modifier.weight(1f)) {
+
+            entry.note?.let {
                 Text(
-                    text = "${LocalDate.ofEpochDay(entry.date).format(DateFmt)} · " +
-                            if (entry.session == MilkSession.MORNING) "Morning" else "Evening",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Green700.copy(alpha = 0.8f)
+                    it,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    modifier = Modifier.padding(end = 4.dp)
                 )
-                Text(
-                    "${"%.1f".format(entry.litres)} L",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Green700
+            }
+
+            IconButton(onClick = onEdit, modifier = Modifier.size(36.dp)) {
+                Icon(
+                    Icons.Default.Edit,
+                    contentDescription = "Edit",
+                    tint = Green700,
+                    modifier = Modifier.size(18.dp)
                 )
-                entry.note?.let {
-                    Text(
-                        it,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Green700.copy(alpha = 0.6f)
-                    )
-                }
             }
-            IconButton(onClick = onEdit) {
-                Icon(Icons.Default.Edit, contentDescription = "Edit", tint = Green700)
-            }
-            IconButton(onClick = onDelete) {
+            IconButton(onClick = onDelete, modifier = Modifier.size(36.dp)) {
                 Icon(
                     Icons.Default.Delete,
                     contentDescription = "Delete",
-                    tint = MaterialTheme.colorScheme.error
+                    tint = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.size(18.dp)
                 )
             }
         }

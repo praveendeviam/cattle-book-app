@@ -14,7 +14,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -85,12 +87,6 @@ fun AppNavigation() {
                         label = { Text("Home") }
                     )
                     NavigationBarItem(
-                        selected = false,
-                        onClick = { navController.navigate(ADD_MILK) },
-                        icon = { Icon(Icons.Default.Add, contentDescription = "Add Milk") },
-                        label = { Text("Add Milk") }
-                    )
-                    NavigationBarItem(
                         selected = currentRoute == HISTORY,
                         onClick = {
                             navController.navigate(HISTORY) {
@@ -121,6 +117,17 @@ fun AppNavigation() {
                         label = { Text("Record") }
                     )
                 }
+            }
+        },
+        floatingActionButton = {
+            if (showBottomNav) {
+                ExtendedFloatingActionButton(
+                    onClick = { navController.navigate(ADD_MILK) },
+                    containerColor = Green700,
+                    contentColor = Color.White,
+                    icon = { Icon(Icons.Default.Add, contentDescription = null) },
+                    text = { Text("Add Milk", fontWeight = FontWeight.SemiBold) }
+                )
             }
         },
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
