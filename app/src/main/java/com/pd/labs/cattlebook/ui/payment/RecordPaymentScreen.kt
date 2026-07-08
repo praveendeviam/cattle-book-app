@@ -1,7 +1,10 @@
 package com.pd.labs.cattlebook.ui.payment
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -12,6 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -21,8 +29,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pd.labs.cattlebook.app
 import com.pd.labs.cattlebook.ui.common.DateField
-import com.pd.labs.cattlebook.ui.theme.Green100
+import com.pd.labs.cattlebook.ui.theme.Amber700
+import com.pd.labs.cattlebook.ui.theme.Green600
 import com.pd.labs.cattlebook.ui.theme.Green700
+import com.pd.labs.cattlebook.ui.theme.Green800
+import com.pd.labs.cattlebook.ui.theme.Teal700
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,9 +55,9 @@ fun RecordPaymentScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Green700,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
+                    containerColor = Amber700,
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.White
                 )
             )
         }
@@ -55,12 +66,11 @@ fun RecordPaymentScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp)
+                .padding(20.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("Step 1 — Select date range", style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold)
+            StepHeader(step = 1, title = "Select date range", color = Green700)
 
             DateField(
                 label = "From Date",
@@ -75,32 +85,47 @@ fun RecordPaymentScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Green100)
+            // Gradient milk total card
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(4.dp, RoundedCornerShape(14.dp))
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(Green800, Green600),
+                            start = Offset.Zero,
+                            end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+                        ),
+                        RoundedCornerShape(14.dp)
+                    )
+                    .padding(horizontal = 20.dp, vertical = 16.dp)
             ) {
-                Row(
-                    Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(Icons.Default.WaterDrop, contentDescription = null,
-                        tint = Green700, modifier = Modifier.size(28.dp))
-                    Spacer(Modifier.width(10.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.WaterDrop,
+                        contentDescription = null,
+                        tint = Color.White.copy(alpha = 0.8f),
+                        modifier = Modifier.size(28.dp)
+                    )
+                    Spacer(Modifier.width(12.dp))
                     Column {
-                        Text("Milk collected in range", style = MaterialTheme.typography.bodyMedium,
-                            color = Green700.copy(alpha = 0.8f))
+                        Text(
+                            "Milk collected in range",
+                            color = Color.White.copy(alpha = 0.75f),
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                         Text(
                             "${"%.1f".format(state.totalLitres)} L",
-                            fontSize = 28.sp, fontWeight = FontWeight.Bold, color = Green700
+                            color = Color.White,
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
             }
 
-            HorizontalDivider()
-
-            Text("Step 2 — Enter rate & amount", style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold)
+            Spacer(Modifier.height(4.dp))
+            StepHeader(step = 2, title = "Enter rate & amount", color = Amber700)
 
             OutlinedTextField(
                 value = state.ratePerLitre,
@@ -111,7 +136,8 @@ fun RecordPaymentScreen(
                 textStyle = LocalTextStyle.current.copy(fontSize = 22.sp),
                 singleLine = true,
                 supportingText = if (state.ratePerLitre.isNotBlank() && state.ratePerLitre.toDoubleOrNull() != null)
-                    {{ Text("${"%.1f".format(state.totalLitres)} L × ₹${state.ratePerLitre}/L") }} else null
+                    {{ Text("${"%.1f".format(state.totalLitres)} L × ₹${state.ratePerLitre}/L") }}
+                else null
             )
 
             OutlinedTextField(
@@ -124,10 +150,8 @@ fun RecordPaymentScreen(
                 singleLine = true
             )
 
-            HorizontalDivider()
-
-            Text("Step 3 — Payment date", style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold)
+            Spacer(Modifier.height(4.dp))
+            StepHeader(step = 3, title = "Payment date", color = Teal700)
 
             DateField(
                 label = "Payment Date",
@@ -138,21 +162,50 @@ fun RecordPaymentScreen(
 
             Spacer(Modifier.height(8.dp))
 
-            val canSave = state.amount.toDoubleOrNull() != null
             Button(
                 onClick = { vm.save(onBack) },
-                enabled = canSave && !state.saving,
-                modifier = Modifier.fillMaxWidth().height(60.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Green700)
+                enabled = state.amount.toDoubleOrNull() != null && !state.saving,
+                modifier = Modifier.fillMaxWidth().height(58.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Amber700),
+                shape = MaterialTheme.shapes.medium
             ) {
-                Text("Confirm & Close Period", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text("Confirm & Close Period", fontSize = 17.sp, fontWeight = FontWeight.Bold)
             }
 
             Text(
                 "This will close the current period and start a new one.",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
             )
         }
+    }
+}
+
+@Composable
+private fun StepHeader(step: Int, title: String, color: Color) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(30.dp)
+                .clip(CircleShape)
+                .background(color),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                "$step",
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 15.sp
+            )
+        }
+        Text(
+            title,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = color
+        )
     }
 }

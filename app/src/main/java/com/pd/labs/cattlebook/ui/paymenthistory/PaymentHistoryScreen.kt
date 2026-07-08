@@ -1,15 +1,20 @@
 package com.pd.labs.cattlebook.ui.paymenthistory
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,8 +23,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pd.labs.cattlebook.app
 import com.pd.labs.cattlebook.data.db.entity.SettlementPeriod
-import com.pd.labs.cattlebook.ui.theme.Green100
-import com.pd.labs.cattlebook.ui.theme.Green700
+import com.pd.labs.cattlebook.ui.theme.Amber700
+import com.pd.labs.cattlebook.ui.theme.Teal50
+import com.pd.labs.cattlebook.ui.theme.Teal700
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -42,32 +48,39 @@ fun PaymentHistoryScreen(
         TopAppBar(
             title = { Text("Payment History", fontWeight = FontWeight.Bold) },
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Green700,
-                titleContentColor = MaterialTheme.colorScheme.onPrimary
+                containerColor = Teal700,
+                titleContentColor = Color.White
             )
         )
 
         if (payments.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
                     Icon(
-                        Icons.Default.CheckCircle,
+                        Icons.Default.Payments,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                        tint = Teal700.copy(alpha = 0.2f),
                         modifier = Modifier.size(64.dp)
                     )
-                    Spacer(Modifier.height(12.dp))
                     Text(
                         "No payments recorded yet",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
+                    )
+                    Text(
+                        "Use Record to log a payment",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
                     )
                 }
             }
         } else {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(payments, key = { it.id }) { period ->
@@ -86,37 +99,67 @@ private fun PaymentCard(period: SettlementPeriod) {
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = Green100)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        shape = RoundedCornerShape(14.dp)
     ) {
         Row(
-            Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                Icons.Default.CheckCircle,
-                contentDescription = null,
-                tint = Green700,
-                modifier = Modifier.size(28.dp)
+            // Teal left strip
+            Box(
+                modifier = Modifier
+                    .width(5.dp)
+                    .height(84.dp)
+                    .clip(RoundedCornerShape(topStart = 14.dp, bottomStart = 14.dp))
+                    .background(Teal700)
             )
-            Spacer(Modifier.width(12.dp))
-            Column(Modifier.weight(1f)) {
-                Text(
-                    text = "$start – $end",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Green700.copy(alpha = 0.75f)
+
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 14.dp, vertical = 14.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.CheckCircle,
+                    contentDescription = null,
+                    tint = Teal700,
+                    modifier = Modifier.size(28.dp)
                 )
-                Text(
-                    text = "₹ %,.2f".format(period.paymentAmount ?: 0.0),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Green700
-                )
-                paidOn?.let {
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f)) {
                     Text(
-                        "Paid on $it",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Green700.copy(alpha = 0.6f)
+                        text = "$start – $end",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f)
                     )
+                    Text(
+                        text = "₹ %,.2f".format(period.paymentAmount ?: 0.0),
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Amber700
+                    )
+                    paidOn?.let {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            Surface(
+                                color = Teal50,
+                                shape = RoundedCornerShape(4.dp)
+                            ) {
+                                Text(
+                                    "Paid $it",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = Teal700,
+                                    fontWeight = FontWeight.Medium,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

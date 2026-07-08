@@ -1,6 +1,8 @@
 package com.pd.labs.cattlebook.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Settings
@@ -9,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -17,13 +22,23 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pd.labs.cattlebook.app
-import com.pd.labs.cattlebook.ui.theme.Green100
+import com.pd.labs.cattlebook.ui.theme.Amber50
+import com.pd.labs.cattlebook.ui.theme.Amber700
+import com.pd.labs.cattlebook.ui.theme.Green50
+import com.pd.labs.cattlebook.ui.theme.Green600
 import com.pd.labs.cattlebook.ui.theme.Green700
+import com.pd.labs.cattlebook.ui.theme.Green800
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 private val DateFmt = DateTimeFormatter.ofPattern("d MMM")
+
+private val HeroGradient = Brush.linearGradient(
+    colors = listOf(Green800, Green600),
+    start = Offset.Zero,
+    end = Offset(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY)
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,15 +82,15 @@ fun HomeScreen(
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Hero card — dark green with white text
-            ElevatedCard(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.elevatedCardColors(containerColor = Green700),
-                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 6.dp)
+            // Gradient hero card
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
+                    .background(HeroGradient, RoundedCornerShape(20.dp))
+                    .padding(horizontal = 24.dp, vertical = 22.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 20.dp)
-                ) {
+                Column {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -93,7 +108,7 @@ fun HomeScreen(
                         )
                     }
 
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(14.dp))
 
                     Text(
                         "MILK COLLECTED",
@@ -104,7 +119,7 @@ fun HomeScreen(
                     Text(
                         "${"%.1f".format(totalLitres)} L",
                         color = Color.White,
-                        fontSize = 56.sp,
+                        fontSize = 58.sp,
                         fontWeight = FontWeight.Bold,
                         lineHeight = 64.sp
                     )
@@ -116,7 +131,7 @@ fun HomeScreen(
                 }
             }
 
-            // Stat cards row
+            // Stat cards
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -124,12 +139,16 @@ fun HomeScreen(
                 StatCard(
                     modifier = Modifier.weight(1f),
                     value = "$daysInPeriod",
-                    label = "days in period"
+                    label = "days in period",
+                    valueColor = Green700,
+                    containerColor = Green50
                 )
                 StatCard(
                     modifier = Modifier.weight(1f),
                     value = "${"%.1f".format(avgPerDay)} L",
-                    label = "avg per day"
+                    label = "avg per day",
+                    valueColor = Amber700,
+                    containerColor = Amber50
                 )
             }
         }
@@ -137,10 +156,17 @@ fun HomeScreen(
 }
 
 @Composable
-private fun StatCard(modifier: Modifier, value: String, label: String) {
+private fun StatCard(
+    modifier: Modifier,
+    value: String,
+    label: String,
+    valueColor: Color,
+    containerColor: Color
+) {
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = Green100)
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -148,14 +174,14 @@ private fun StatCard(modifier: Modifier, value: String, label: String) {
         ) {
             Text(
                 value,
-                color = Green700,
+                color = valueColor,
                 fontSize = 26.sp,
                 fontWeight = FontWeight.Bold,
                 lineHeight = 30.sp
             )
             Text(
                 label,
-                color = Green700.copy(alpha = 0.65f),
+                color = valueColor.copy(alpha = 0.6f),
                 style = MaterialTheme.typography.bodySmall
             )
         }

@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -20,7 +21,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pd.labs.cattlebook.app
 import com.pd.labs.cattlebook.data.db.entity.MilkSession
 import com.pd.labs.cattlebook.ui.common.DateField
+import com.pd.labs.cattlebook.ui.theme.Amber200
+import com.pd.labs.cattlebook.ui.theme.Amber700
+import com.pd.labs.cattlebook.ui.theme.Amber800
 import com.pd.labs.cattlebook.ui.theme.Green700
+import com.pd.labs.cattlebook.ui.theme.Teal100
+import com.pd.labs.cattlebook.ui.theme.Teal700
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,12 +39,17 @@ fun AddMilkScreen(
     )
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
-    val title = if (state.isEditMode) "Edit Milk Entry" else "Add Milk"
+    val isEdit = state.isEditMode
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(title, fontWeight = FontWeight.Bold) },
+                title = {
+                    Text(
+                        if (isEdit) "Edit Milk Entry" else "Add Milk",
+                        fontWeight = FontWeight.Bold
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -46,8 +57,8 @@ fun AddMilkScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Green700,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.White
                 )
             )
         }
@@ -56,9 +67,9 @@ fun AddMilkScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(16.dp)
+                .padding(20.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             DateField(
                 label = "Date",
@@ -67,20 +78,36 @@ fun AddMilkScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Text("Session", style = MaterialTheme.typography.titleMedium)
-            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                FilterChip(
-                    selected = state.session == MilkSession.MORNING,
-                    onClick = { vm.onSessionChange(MilkSession.MORNING) },
-                    label = { Text("Morning", fontSize = 17.sp) },
-                    modifier = Modifier.weight(1f).height(52.dp)
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    "Session",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold
                 )
-                FilterChip(
-                    selected = state.session == MilkSession.EVENING,
-                    onClick = { vm.onSessionChange(MilkSession.EVENING) },
-                    label = { Text("Evening", fontSize = 17.sp) },
-                    modifier = Modifier.weight(1f).height(52.dp)
-                )
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    FilterChip(
+                        selected = state.session == MilkSession.MORNING,
+                        onClick = { vm.onSessionChange(MilkSession.MORNING) },
+                        label = { Text("Morning", fontSize = 16.sp, fontWeight = FontWeight.Medium) },
+                        modifier = Modifier.weight(1f).height(52.dp),
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = Amber200,
+                            selectedLabelColor = Amber800,
+                            selectedLeadingIconColor = Amber800
+                        )
+                    )
+                    FilterChip(
+                        selected = state.session == MilkSession.EVENING,
+                        onClick = { vm.onSessionChange(MilkSession.EVENING) },
+                        label = { Text("Evening", fontSize = 16.sp, fontWeight = FontWeight.Medium) },
+                        modifier = Modifier.weight(1f).height(52.dp),
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = Teal100,
+                            selectedLabelColor = Teal700,
+                            selectedLeadingIconColor = Teal700
+                        )
+                    )
+                }
             }
 
             OutlinedTextField(
@@ -91,7 +118,7 @@ fun AddMilkScreen(
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = LocalTextStyle.current.copy(fontSize = 22.sp),
                 singleLine = true,
-                suffix = { Text("L", fontSize = 18.sp) }
+                suffix = { Text("L", fontSize = 18.sp, color = Green700, fontWeight = FontWeight.SemiBold) }
             )
 
             OutlinedTextField(
@@ -102,17 +129,19 @@ fun AddMilkScreen(
                 maxLines = 2
             )
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(4.dp))
 
             Button(
                 onClick = { vm.save(onBack) },
                 enabled = state.litres.toDoubleOrNull() != null && !state.saving,
-                modifier = Modifier.fillMaxWidth().height(60.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Green700)
+                modifier = Modifier.fillMaxWidth().height(58.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Green700),
+                shape = MaterialTheme.shapes.medium
             ) {
                 Text(
-                    if (state.isEditMode) "Update Entry" else "Save Entry",
-                    fontSize = 20.sp, fontWeight = FontWeight.Bold
+                    if (isEdit) "Update Entry" else "Save Entry",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
