@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -29,46 +28,46 @@ private val DateFmt = DateTimeFormatter.ofPattern("d MMM yyyy")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PaymentHistoryScreen(
-    onBack: () -> Unit,
     vm: PaymentHistoryViewModel = viewModel(
         factory = PaymentHistoryViewModel.factory(LocalContext.current.app.repository)
     )
 ) {
     val payments by vm.payments.collectAsStateWithLifecycle(emptyList())
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Payment History", fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Green700,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
+        TopAppBar(
+            title = { Text("Payment History", fontWeight = FontWeight.Bold) },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Green700,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary
             )
-        }
-    ) { padding ->
+        )
+
         if (payments.isEmpty()) {
-            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Default.CheckCircle, contentDescription = null,
+                    Icon(
+                        Icons.Default.CheckCircle,
+                        contentDescription = null,
                         tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
-                        modifier = Modifier.size(64.dp))
+                        modifier = Modifier.size(64.dp)
+                    )
                     Spacer(Modifier.height(12.dp))
-                    Text("No payments recorded yet",
+                    Text(
+                        "No payments recorded yet",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    )
                 }
             }
         } else {
             LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(padding),
-                contentPadding = PaddingValues(16.dp),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(payments, key = { it.id }) { period ->
@@ -93,8 +92,12 @@ private fun PaymentCard(period: SettlementPeriod) {
             Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Default.CheckCircle, contentDescription = null,
-                tint = Green700, modifier = Modifier.size(28.dp))
+            Icon(
+                Icons.Default.CheckCircle,
+                contentDescription = null,
+                tint = Green700,
+                modifier = Modifier.size(28.dp)
+            )
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
                 Text(
@@ -109,9 +112,11 @@ private fun PaymentCard(period: SettlementPeriod) {
                     color = Green700
                 )
                 paidOn?.let {
-                    Text("Paid on $it",
+                    Text(
+                        "Paid on $it",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Green700.copy(alpha = 0.6f))
+                        color = Green700.copy(alpha = 0.6f)
+                    )
                 }
             }
         }

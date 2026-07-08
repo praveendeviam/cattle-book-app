@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.WaterDrop
@@ -31,7 +30,6 @@ private val DateFmt = DateTimeFormatter.ofPattern("d MMM yyyy")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
-    onBack: () -> Unit,
     onEditMilk: (Long) -> Unit = {},
     vm: HistoryViewModel = viewModel(factory = HistoryViewModel.factory(LocalContext.current.app.repository))
 ) {
@@ -57,33 +55,31 @@ fun HistoryScreen(
         )
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Milk History", fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Green700,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
-                )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+    ) {
+        TopAppBar(
+            title = { Text("Milk History", fontWeight = FontWeight.Bold) },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Green700,
+                titleContentColor = MaterialTheme.colorScheme.onPrimary
             )
-        }
-    ) { padding ->
+        )
+
         if (entries.isEmpty()) {
-            Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                Text("No milk entries yet",
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(
+                    "No milk entries yet",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                )
             }
         } else {
             LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(padding),
-                contentPadding = PaddingValues(16.dp),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(entries, key = { it.id }) { entry ->
@@ -108,8 +104,12 @@ private fun MilkCard(entry: MilkEntry, onEdit: () -> Unit, onDelete: () -> Unit)
             Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(Icons.Default.WaterDrop, contentDescription = "Milk",
-                tint = Green700, modifier = Modifier.size(26.dp))
+            Icon(
+                Icons.Default.WaterDrop,
+                contentDescription = "Milk",
+                tint = Green700,
+                modifier = Modifier.size(26.dp)
+            )
             Spacer(Modifier.width(10.dp))
             Column(Modifier.weight(1f)) {
                 Text(
@@ -120,19 +120,27 @@ private fun MilkCard(entry: MilkEntry, onEdit: () -> Unit, onDelete: () -> Unit)
                 )
                 Text(
                     "${"%.1f".format(entry.litres)} L",
-                    fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Green700
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Green700
                 )
                 entry.note?.let {
-                    Text(it, style = MaterialTheme.typography.bodyMedium,
-                        color = Green700.copy(alpha = 0.6f))
+                    Text(
+                        it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Green700.copy(alpha = 0.6f)
+                    )
                 }
             }
             IconButton(onClick = onEdit) {
                 Icon(Icons.Default.Edit, contentDescription = "Edit", tint = Green700)
             }
             IconButton(onClick = onDelete) {
-                Icon(Icons.Default.Delete, contentDescription = "Delete",
-                    tint = MaterialTheme.colorScheme.error)
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = "Delete",
+                    tint = MaterialTheme.colorScheme.error
+                )
             }
         }
     }
