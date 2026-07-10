@@ -1,5 +1,7 @@
 package io.github.praveendeviam.cattlebook.ui.home
 
+import android.app.Activity
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -67,6 +69,10 @@ fun HomeScreen(
     onSettings: () -> Unit,
     vm: HomeViewModel = viewModel(factory = HomeViewModel.factory(LocalContext.current.app.repository))
 ) {
+    val context = LocalContext.current
+    val prefs = remember { context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE) }
+    val currentLang = remember { prefs.getString("language", "en") ?: "en" }
+
     val state by vm.uiState.collectAsStateWithLifecycle()
     val days = remember(state.fromDate, state.toDate) {
         ChronoUnit.DAYS.between(state.fromDate, state.toDate) + 1
@@ -115,6 +121,25 @@ fun HomeScreen(
                 titleContentColor = Color.White
             ),
             actions = {
+                Surface(
+                    modifier = Modifier
+                        .padding(end = 4.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .clickable {
+                            val newLang = if (currentLang == "en") "ta" else "en"
+                            prefs.edit().putString("language", newLang).apply()
+                            (context as? Activity)?.recreate()
+                        },
+                    color = Color.White.copy(alpha = 0.20f)
+                ) {
+                    Text(
+                        if (currentLang == "en") "EN" else "த",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp,
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                    )
+                }
                 IconButton(onClick = onSettings) {
                     Icon(Icons.Default.Settings, null, tint = Color.White)
                 }
