@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">பால் புத்தகம்</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">முகப்பு</string>
+    <string name="nav_history">வரலாறு</string>
+    <string name="nav_payments">கட்டணங்கள்</string>
+    <string name="nav_record">பதிவு</string>
+    <string name="nav_add_milk">பால் சேர்</string>
+
+    <!-- Home Screen -->
+    <string name="viewing_period">காலகட்டம்</string>
+    <string name="label_from">இருந்து</string>
+    <string name="label_to">வரை</string>
+    <string name="total_collected">மொத்தம் சேகரிக்கப்பட்டது</string>
+    <string name="todays_milk">இன்றைய பால்</string>
+    <string name="morning">காலை</string>
+    <string name="evening">மாலை</string>
+    <string name="logged">பதிவு செய்யப்பட்டது</string>
+    <string name="not_logged">பதிவு இல்லை</string>
+    <string name="recent_entries">சமீபத்திய பதிவுகள்</string>
+
+    <!-- History Screen -->
+    <string name="milk_history">பால் வரலாறு</string>
+    <string name="no_entries_day">இந்த நாளில் பதிவு இல்லை</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">அமைப்புகள்</string>
+    <string name="language">மொழி</string>
+    <string name="english">ஆங்கிலம்</string>
+    <string name="tamil">தமிழ்</string>
+
+    <!-- Common -->
+    <string name="ok">சரி</string>
+    <string name="cancel">ரத்து</string>
+    <string name="delete">நீக்கு</string>
+    <string name="delete_entry">பதிவை நீக்கவா?</string>
+    <string name="delete_confirm">இந்த பதிவு நிரந்தரமாக நீக்கப்படும்.</string>
+</resources>

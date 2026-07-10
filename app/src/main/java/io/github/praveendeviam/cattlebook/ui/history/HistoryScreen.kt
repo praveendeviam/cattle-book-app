@@ -20,10 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.praveendeviam.cattlebook.R
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.praveendeviam.cattlebook.app
@@ -58,20 +60,20 @@ fun HistoryScreen(
     if (entryToDelete != null) {
         AlertDialog(
             onDismissRequest = { entryToDelete = null },
-            title = { Text("Delete entry?") },
-            text = { Text("This entry will be permanently removed.") },
+            title = { Text(stringResource(R.string.delete_entry)) },
+            text = { Text(stringResource(R.string.delete_confirm)) },
             confirmButton = {
                 TextButton(onClick = { vm.deleteMilk(entryToDelete!!); entryToDelete = null }) {
-                    Text("Delete", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
                 }
             },
-            dismissButton = { TextButton(onClick = { entryToDelete = null }) { Text("Cancel") } }
+            dismissButton = { TextButton(onClick = { entryToDelete = null }) { Text(stringResource(R.string.cancel)) } }
         )
     }
 
     Column(Modifier.fillMaxSize().statusBarsPadding()) {
         TopAppBar(
-            title = { Text("Milk History", fontWeight = FontWeight.Bold) },
+            title = { Text(stringResource(R.string.milk_history), fontWeight = FontWeight.Bold) },
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Green700, titleContentColor = Color.White)
         )
 
@@ -149,7 +151,7 @@ fun HistoryScreen(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Icon(Icons.Default.WaterDrop, null, tint = Green700.copy(0.15f), modifier = Modifier.size(40.dp))
-                        Text("No entries on this day", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface.copy(0.35f))
+                        Text(stringResource(R.string.no_entries_day), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface.copy(0.35f))
                     }
                 }
             } else {
@@ -255,7 +257,7 @@ private fun MilkCard(entry: MilkEntry, onEdit: () -> Unit, onDelete: () -> Unit)
             Row(Modifier.weight(1f).padding(horizontal = 12.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
                 Surface(color = pillBg, shape = RoundedCornerShape(6.dp)) {
                     Text(
-                        if (isMorning) "Morning" else "Evening",
+                        if (isMorning) stringResource(R.string.morning) else stringResource(R.string.evening),
                         color = accent,
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,

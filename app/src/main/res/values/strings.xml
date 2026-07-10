@@ -1,3 +1,39 @@
 <resources>
-    <string name="app_name">CattleBook</string>
+    <string name="app_name">Paal Book</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_history">History</string>
+    <string name="nav_payments">Payments</string>
+    <string name="nav_record">Record</string>
+    <string name="nav_add_milk">Add Milk</string>
+
+    <!-- Home Screen -->
+    <string name="viewing_period">VIEWING PERIOD</string>
+    <string name="label_from">FROM</string>
+    <string name="label_to">TO</string>
+    <string name="total_collected">TOTAL COLLECTED</string>
+    <string name="todays_milk">TODAY\'S MILK</string>
+    <string name="morning">Morning</string>
+    <string name="evening">Evening</string>
+    <string name="logged">Logged</string>
+    <string name="not_logged">Not logged</string>
+    <string name="recent_entries">RECENT ENTRIES</string>
+
+    <!-- History Screen -->
+    <string name="milk_history">Milk History</string>
+    <string name="no_entries_day">No entries on this day</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Settings</string>
+    <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="tamil">Tamil</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="delete_entry">Delete entry?</string>
+    <string name="delete_confirm">This entry will be permanently removed.</string>
 </resources>

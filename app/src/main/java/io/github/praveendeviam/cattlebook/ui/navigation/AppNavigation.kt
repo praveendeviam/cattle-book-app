@@ -1,4 +1,4 @@
-﻿package io.github.praveendeviam.cattlebook.ui.navigation
+package io.github.praveendeviam.cattlebook.ui.navigation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -24,6 +25,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import io.github.praveendeviam.cattlebook.R
 import io.github.praveendeviam.cattlebook.app
 import io.github.praveendeviam.cattlebook.ui.addmilk.AddMilkScreen
 import io.github.praveendeviam.cattlebook.ui.history.HistoryScreen
@@ -83,8 +85,8 @@ fun AppNavigation() {
                                 restoreState = true
                             }
                         },
-                        icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                        label = { Text("Home") }
+                        icon = { Icon(Icons.Default.Home, contentDescription = null) },
+                        label = { Text(stringResource(R.string.nav_home)) }
                     )
                     NavigationBarItem(
                         selected = currentRoute == HISTORY,
@@ -95,8 +97,8 @@ fun AppNavigation() {
                                 restoreState = true
                             }
                         },
-                        icon = { Icon(Icons.Default.History, contentDescription = "History") },
-                        label = { Text("History") }
+                        icon = { Icon(Icons.Default.History, contentDescription = null) },
+                        label = { Text(stringResource(R.string.nav_history)) }
                     )
                     NavigationBarItem(
                         selected = currentRoute == PAYMENT_HISTORY,
@@ -107,14 +109,14 @@ fun AppNavigation() {
                                 restoreState = true
                             }
                         },
-                        icon = { Icon(Icons.Default.Receipt, contentDescription = "Payments") },
-                        label = { Text("Payments") }
+                        icon = { Icon(Icons.Default.Receipt, contentDescription = null) },
+                        label = { Text(stringResource(R.string.nav_payments)) }
                     )
                     NavigationBarItem(
                         selected = currentRoute == PAYMENT,
                         onClick = { navController.navigate(PAYMENT) },
-                        icon = { Icon(Icons.Default.Payments, contentDescription = "Record") },
-                        label = { Text("Record") }
+                        icon = { Icon(Icons.Default.Payments, contentDescription = null) },
+                        label = { Text(stringResource(R.string.nav_record)) }
                     )
                 }
             }
@@ -126,7 +128,7 @@ fun AppNavigation() {
                     containerColor = Green700,
                     contentColor = Color.White,
                     icon = { Icon(Icons.Default.Add, contentDescription = null) },
-                    text = { Text("Add Milk", fontWeight = FontWeight.SemiBold) }
+                    text = { Text(stringResource(R.string.nav_add_milk), fontWeight = FontWeight.SemiBold) }
                 )
             }
         },
@@ -170,10 +172,7 @@ fun AppNavigation() {
                 RecordPaymentScreen(onBack = { navController.popBackStack() })
             }
             composable(SETTINGS) {
-                SettingsScreen(
-                    onBack = { navController.popBackStack() },
-                    onSetupPin = { navController.navigate(PIN_SETUP) }
-                )
+                SettingsScreen(onBack = { navController.popBackStack() })
             }
         }
     }
