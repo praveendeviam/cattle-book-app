@@ -1,4 +1,4 @@
-﻿package io.github.praveendeviam.cattlebook.ui.home
+package io.github.praveendeviam.cattlebook.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -9,48 +9,72 @@ import io.github.praveendeviam.cattlebook.data.db.entity.MilkEntry
 import io.github.praveendeviam.cattlebook.data.db.entity.MilkSession
 import io.github.praveendeviam.cattlebook.data.db.entity.SettlementPeriod
 import io.github.praveendeviam.cattlebook.data.repository.LedgerRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 data class HomeUiState(
-    val period: SettlementPeriod? = null,
+    val fromDate: LocalDate = LocalDate.now(),
+    val toDate: LocalDate = LocalDate.now(),
     val totalLitres: Double = 0.0,
     val todayMorning: Double? = null,
     val todayEvening: Double? = null,
     val recentEntries: List<MilkEntry> = emptyList(),
+    val period: SettlementPeriod? = null,
+    val showFromPicker: Boolean = false,
+    val showToPicker: Boolean = false,
 )
 
-@OptIn(ExperimentalCoroutinesApi::class)
+private data class RangeState(
+    val fromOverride: LocalDate? = null,
+    val toDate: LocalDate = LocalDate.now(),
+    val showFromPicker: Boolean = false,
+    val showToPicker: Boolean = false,
+)
+
 class HomeViewModel(private val repository: LedgerRepository) : ViewModel() {
+
+    private val _range = MutableStateFlow(RangeState())
 
     val uiState: StateFlow<HomeUiState> = combine(
         repository.getCurrentPeriod(),
-        repository.getAllMilk()
-    ) { period, allEntries ->
-        period to allEntries
-    }.flatMapLatest { (period, allEntries) ->
+        repository.getAllMilk(),
+        _range
+    ) { period, allEntries, range ->
+        val from = range.fromOverride
+            ?: period?.let { LocalDate.ofEpochDay(it.startDate) }
+            ?: LocalDate.now()
+        val fromEpoch = from.toEpochDay()
+        val toEpoch = range.toDate.toEpochDay()
         val todayEpoch = LocalDate.now().toEpochDay()
-        val todayEntries = allEntries.filter { it.date == todayEpoch }
-        val morning = todayEntries.find { it.session == MilkSession.MORNING }?.litres
-        val evening = todayEntries.find { it.session == MilkSession.EVENING }?.litres
-        val recent = allEntries.take(5)
 
-        if (period == null) {
-            flowOf(HomeUiState(todayMorning = morning, todayEvening = evening, recentEntries = recent))
-        } else {
-            repository.getTotalLitres(period.id).map { litres ->
-                HomeUiState(
-                    period = period,
-                    totalLitres = litres,
-                    todayMorning = morning,
-                    todayEvening = evening,
-                    recentEntries = recent
-                )
-            }
-        }
+        val todayEntries = allEntries.filter { it.date == todayEpoch }
+        val rangeTotal = allEntries.filter { it.date in fromEpoch..toEpoch }.sumOf { it.litres }
+
+        HomeUiState(
+            fromDate = from,
+            toDate = range.toDate,
+            totalLitres = rangeTotal,
+            todayMorning = todayEntries.find { it.session == MilkSession.MORNING }?.litres,
+            todayEvening = todayEntries.find { it.session == MilkSession.EVENING }?.litres,
+            recentEntries = allEntries.take(5),
+            period = period,
+            showFromPicker = range.showFromPicker,
+            showToPicker = range.showToPicker,
+        )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeUiState())
+
+    fun showFromPicker() = _range.update { it.copy(showFromPicker = true) }
+    fun showToPicker()   = _range.update { it.copy(showToPicker = true) }
+
+    fun onFromDateChange(date: LocalDate) =
+        _range.update { it.copy(fromOverride = date, showFromPicker = false) }
+
+    fun onToDateChange(date: LocalDate) =
+        _range.update { it.copy(toDate = date, showToPicker = false) }
+
+    fun dismissFromPicker() = _range.update { it.copy(showFromPicker = false) }
+    fun dismissToPicker()   = _range.update { it.copy(showToPicker = false) }
 
     init {
         viewModelScope.launch { repository.ensureCurrentPeriod() }

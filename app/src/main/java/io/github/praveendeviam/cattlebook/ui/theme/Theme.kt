@@ -1,4 +1,4 @@
-﻿package io.github.praveendeviam.cattlebook.ui.theme
+package io.github.praveendeviam.cattlebook.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
@@ -20,14 +20,15 @@ private val LightColors = lightColorScheme(
     onTertiaryContainer  = Teal700,
     error                = Red600,
     onError              = Color.White,
-    errorContainer       = Color(0xFFFFDAD6),
+    errorContainer       = Color(0xFFFEE2E2),
     onErrorContainer     = Red600,
     background           = Surface,
     onBackground         = OnSurface,
-    surface              = Surface,
+    surface              = Color.White,   // cards float above cream
     onSurface            = OnSurface,
     surfaceVariant       = SurfaceVar,
-    onSurfaceVariant     = Color(0xFF44403C),
+    onSurfaceVariant     = Color(0xFF57534E),
+    outline              = Color(0xFFD6D3D1),
 )
 
 @Composable

@@ -1,36 +1,37 @@
-﻿package io.github.praveendeviam.cattlebook.ui.theme
+package io.github.praveendeviam.cattlebook.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Green – milk, nature (primary)
-val Green900 = Color(0xFF1B5E20)
-val Green800 = Color(0xFF2E7D32)
-val Green700 = Color(0xFF388E3C)
-val Green600 = Color(0xFF43A047)
-val Green500 = Color(0xFF4CAF50)
-val Green200 = Color(0xFFA5D6A7)
-val Green100 = Color(0xFFC8E6C9)
-val Green50  = Color(0xFFE8F5E9)
+// ── Primary: Deep Forest Green (milk, nature) ─────────────────────────────────
+val Green900 = Color(0xFF052E16)
+val Green800 = Color(0xFF14532D)
+val Green700 = Color(0xFF166534)
+val Green600 = Color(0xFF16A34A)
+val Green500 = Color(0xFF22C55E)
+val Green200 = Color(0xFF86EFAC)
+val Green100 = Color(0xFFDCFCE7)
+val Green50  = Color(0xFFF0FDF4)
 
-// Amber – earnings, payments (secondary)
-val Amber800 = Color(0xFFFF6F00)
-val Amber700 = Color(0xFFF57F17)
-val Amber500 = Color(0xFFFFC107)
-val Amber200 = Color(0xFFFFE082)
-val Amber100 = Color(0xFFFFF8E1)
-val Amber50  = Color(0xFFFFFDE7)
+// ── Secondary: Warm Amber/Gold (payments, earnings) ──────────────────────────
+val Amber800 = Color(0xFF92400E)
+val Amber700 = Color(0xFFB45309)
+val Amber600 = Color(0xFFD97706)
+val Amber500 = Color(0xFFF59E0B)
+val Amber200 = Color(0xFFFCD34D)
+val Amber100 = Color(0xFFFEF3C7)
+val Amber50  = Color(0xFFFFFBEB)
 
-// Teal – settled, history (tertiary)
-val Teal700 = Color(0xFF00796B)
-val Teal600 = Color(0xFF00897B)
-val Teal200 = Color(0xFF80CBC4)
-val Teal100 = Color(0xFFB2DFDB)
-val Teal50  = Color(0xFFE0F2F1)
+// ── Tertiary: Teal (settled, history) ─────────────────────────────────────────
+val Teal700 = Color(0xFF0F766E)
+val Teal600 = Color(0xFF0D9488)
+val Teal200 = Color(0xFF5EEAD4)
+val Teal100 = Color(0xFFCCFBF1)
+val Teal50  = Color(0xFFF0FDFA)
 
-// Status
-val Red600 = Color(0xFFE53935)
+// ── Status ─────────────────────────────────────────────────────────────────────
+val Red600 = Color(0xFFDC2626)
 
-// Surfaces
-val Surface    = Color(0xFFFFFBF2)
+// ── Surfaces & Text ────────────────────────────────────────────────────────────
+val Surface    = Color(0xFFFAF7F0)   // warm cream background
 val SurfaceVar = Color(0xFFF0EBE0)
-val OnSurface  = Color(0xFF1A1C18)
+val OnSurface  = Color(0xFF1C1917)   // warm near-black
