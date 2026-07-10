@@ -1,4 +1,4 @@
-﻿package io.github.praveendeviam.cattlebook.ui.paymenthistory
+package io.github.praveendeviam.cattlebook.ui.paymenthistory
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,11 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.praveendeviam.cattlebook.R
 import io.github.praveendeviam.cattlebook.app
 import io.github.praveendeviam.cattlebook.data.db.entity.SettlementPeriod
 import io.github.praveendeviam.cattlebook.ui.theme.Amber700
@@ -46,7 +48,7 @@ fun PaymentHistoryScreen(
             .statusBarsPadding()
     ) {
         TopAppBar(
-            title = { Text("Payment History", fontWeight = FontWeight.Bold) },
+            title = { Text(stringResource(R.string.payment_history), fontWeight = FontWeight.Bold) },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Teal700,
                 titleContentColor = Color.White
@@ -66,12 +68,12 @@ fun PaymentHistoryScreen(
                         modifier = Modifier.size(64.dp)
                     )
                     Text(
-                        "No payments recorded yet",
+                        stringResource(R.string.no_payments),
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
                     )
                     Text(
-                        "Use Record to log a payment",
+                        stringResource(R.string.use_record_to_log),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
                     )
@@ -107,7 +109,6 @@ private fun PaymentCard(period: SettlementPeriod) {
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Teal left strip
             Box(
                 modifier = Modifier
                     .width(5.dp)
@@ -115,7 +116,6 @@ private fun PaymentCard(period: SettlementPeriod) {
                     .clip(RoundedCornerShape(topStart = 14.dp, bottomStart = 14.dp))
                     .background(Teal700)
             )
-
             Row(
                 modifier = Modifier
                     .weight(1f)
@@ -141,23 +141,18 @@ private fun PaymentCard(period: SettlementPeriod) {
                         fontWeight = FontWeight.Bold,
                         color = Amber700
                     )
-                    paidOn?.let {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    paidOn?.let { dateStr ->
+                        Surface(
+                            color = Teal50,
+                            shape = RoundedCornerShape(4.dp)
                         ) {
-                            Surface(
-                                color = Teal50,
-                                shape = RoundedCornerShape(4.dp)
-                            ) {
-                                Text(
-                                    "Paid $it",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    color = Teal700,
-                                    fontWeight = FontWeight.Medium,
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
-                                )
-                            }
+                            Text(
+                                stringResource(R.string.paid_on, dateStr),
+                                style = MaterialTheme.typography.labelSmall,
+                                color = Teal700,
+                                fontWeight = FontWeight.Medium,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                            )
                         }
                     }
                 }

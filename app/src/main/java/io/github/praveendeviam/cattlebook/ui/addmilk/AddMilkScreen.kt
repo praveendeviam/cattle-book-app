@@ -1,4 +1,4 @@
-﻿package io.github.praveendeviam.cattlebook.ui.addmilk
+package io.github.praveendeviam.cattlebook.ui.addmilk
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -12,12 +12,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.praveendeviam.cattlebook.R
 import io.github.praveendeviam.cattlebook.app
 import io.github.praveendeviam.cattlebook.data.db.entity.MilkSession
 import io.github.praveendeviam.cattlebook.ui.common.DateField
@@ -46,13 +48,13 @@ fun AddMilkScreen(
             TopAppBar(
                 title = {
                     Text(
-                        if (isEdit) "Edit Milk Entry" else "Add Milk",
+                        if (isEdit) stringResource(R.string.edit_milk_entry) else stringResource(R.string.nav_add_milk),
                         fontWeight = FontWeight.Bold
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -72,7 +74,7 @@ fun AddMilkScreen(
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             DateField(
-                label = "Date",
+                label = stringResource(R.string.date_label),
                 date = state.date,
                 onDateSelected = vm::onDateChange,
                 modifier = Modifier.fillMaxWidth()
@@ -80,7 +82,7 @@ fun AddMilkScreen(
 
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(
-                    "Session",
+                    stringResource(R.string.session),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -88,7 +90,7 @@ fun AddMilkScreen(
                     FilterChip(
                         selected = state.session == MilkSession.MORNING,
                         onClick = { vm.onSessionChange(MilkSession.MORNING) },
-                        label = { Text("Morning", fontSize = 16.sp, fontWeight = FontWeight.Medium) },
+                        label = { Text(stringResource(R.string.morning), fontSize = 16.sp, fontWeight = FontWeight.Medium) },
                         modifier = Modifier.weight(1f).height(52.dp),
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = Amber200,
@@ -99,7 +101,7 @@ fun AddMilkScreen(
                     FilterChip(
                         selected = state.session == MilkSession.EVENING,
                         onClick = { vm.onSessionChange(MilkSession.EVENING) },
-                        label = { Text("Evening", fontSize = 16.sp, fontWeight = FontWeight.Medium) },
+                        label = { Text(stringResource(R.string.evening), fontSize = 16.sp, fontWeight = FontWeight.Medium) },
                         modifier = Modifier.weight(1f).height(52.dp),
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = Teal100,
@@ -113,7 +115,7 @@ fun AddMilkScreen(
             OutlinedTextField(
                 value = state.litres,
                 onValueChange = vm::onLitresChange,
-                label = { Text("Litres") },
+                label = { Text(stringResource(R.string.litres_label)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = LocalTextStyle.current.copy(fontSize = 22.sp),
@@ -124,7 +126,7 @@ fun AddMilkScreen(
             OutlinedTextField(
                 value = state.note,
                 onValueChange = vm::onNoteChange,
-                label = { Text("Note — optional") },
+                label = { Text(stringResource(R.string.note_optional)) },
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 2
             )
@@ -139,7 +141,7 @@ fun AddMilkScreen(
                 shape = MaterialTheme.shapes.medium
             ) {
                 Text(
-                    if (isEdit) "Update Entry" else "Save Entry",
+                    if (isEdit) stringResource(R.string.update_entry) else stringResource(R.string.save_entry),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )

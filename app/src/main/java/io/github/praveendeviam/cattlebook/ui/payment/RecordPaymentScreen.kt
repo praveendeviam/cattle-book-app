@@ -1,4 +1,4 @@
-﻿package io.github.praveendeviam.cattlebook.ui.payment
+package io.github.praveendeviam.cattlebook.ui.payment
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,12 +21,14 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.praveendeviam.cattlebook.R
 import io.github.praveendeviam.cattlebook.app
 import io.github.praveendeviam.cattlebook.ui.common.DateField
 import io.github.praveendeviam.cattlebook.ui.theme.Amber700
@@ -48,10 +50,10 @@ fun RecordPaymentScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Record Payment", fontWeight = FontWeight.Bold) },
+                title = { Text(stringResource(R.string.record_payment), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -70,22 +72,21 @@ fun RecordPaymentScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            StepHeader(step = 1, title = "Select date range", color = Green700)
+            StepHeader(step = 1, title = stringResource(R.string.step_date_range), color = Green700)
 
             DateField(
-                label = "From Date",
+                label = stringResource(R.string.from_date),
                 date = state.startDate,
                 onDateSelected = vm::onStartDateChange,
                 modifier = Modifier.fillMaxWidth()
             )
             DateField(
-                label = "To Date",
+                label = stringResource(R.string.to_date),
                 date = state.endDate,
                 onDateSelected = vm::onEndDateChange,
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Gradient milk total card
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -110,7 +111,7 @@ fun RecordPaymentScreen(
                     Spacer(Modifier.width(12.dp))
                     Column {
                         Text(
-                            "Milk collected in range",
+                            stringResource(R.string.milk_in_range),
                             color = Color.White.copy(alpha = 0.75f),
                             style = MaterialTheme.typography.bodyMedium
                         )
@@ -125,12 +126,12 @@ fun RecordPaymentScreen(
             }
 
             Spacer(Modifier.height(4.dp))
-            StepHeader(step = 2, title = "Enter rate & amount", color = Amber700)
+            StepHeader(step = 2, title = stringResource(R.string.step_rate_amount), color = Amber700)
 
             OutlinedTextField(
                 value = state.ratePerLitre,
                 onValueChange = vm::onRateChange,
-                label = { Text("Rate per Litre (₹)") },
+                label = { Text(stringResource(R.string.rate_per_litre)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = LocalTextStyle.current.copy(fontSize = 22.sp),
@@ -143,7 +144,7 @@ fun RecordPaymentScreen(
             OutlinedTextField(
                 value = state.amount,
                 onValueChange = vm::onAmountChange,
-                label = { Text("Amount Received (₹)") },
+                label = { Text(stringResource(R.string.amount_received)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
                 textStyle = LocalTextStyle.current.copy(fontSize = 22.sp),
@@ -151,10 +152,10 @@ fun RecordPaymentScreen(
             )
 
             Spacer(Modifier.height(4.dp))
-            StepHeader(step = 3, title = "Payment date", color = Teal700)
+            StepHeader(step = 3, title = stringResource(R.string.step_payment_date), color = Teal700)
 
             DateField(
-                label = "Payment Date",
+                label = stringResource(R.string.payment_date),
                 date = state.paymentDate,
                 onDateSelected = vm::onPaymentDateChange,
                 modifier = Modifier.fillMaxWidth()
@@ -169,11 +170,11 @@ fun RecordPaymentScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Amber700),
                 shape = MaterialTheme.shapes.medium
             ) {
-                Text("Confirm & Close Period", fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.confirm_close), fontSize = 17.sp, fontWeight = FontWeight.Bold)
             }
 
             Text(
-                "This will close the current period and start a new one.",
+                stringResource(R.string.close_period_note),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
             )

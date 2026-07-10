@@ -24,6 +24,35 @@
     <string name="milk_history">Milk History</string>
     <string name="no_entries_day">No entries on this day</string>
 
+    <!-- Add Milk Screen -->
+    <string name="edit_milk_entry">Edit Milk Entry</string>
+    <string name="date_label">Date</string>
+    <string name="session">Session</string>
+    <string name="litres_label">Litres</string>
+    <string name="note_optional">Note — optional</string>
+    <string name="save_entry">Save Entry</string>
+    <string name="update_entry">Update Entry</string>
+
+    <!-- Record Payment Screen -->
+    <string name="record_payment">Record Payment</string>
+    <string name="step_date_range">Select date range</string>
+    <string name="step_rate_amount">Enter rate &amp; amount</string>
+    <string name="step_payment_date">Payment date</string>
+    <string name="from_date">From Date</string>
+    <string name="to_date">To Date</string>
+    <string name="milk_in_range">Milk collected in range</string>
+    <string name="rate_per_litre">Rate per Litre (₹)</string>
+    <string name="amount_received">Amount Received (₹)</string>
+    <string name="payment_date">Payment Date</string>
+    <string name="confirm_close">Confirm &amp; Close Period</string>
+    <string name="close_period_note">This will close the current period and start a new one.</string>
+
+    <!-- Payment History Screen -->
+    <string name="payment_history">Payment History</string>
+    <string name="no_payments">No payments recorded yet</string>
+    <string name="use_record_to_log">Use Record to log a payment</string>
+    <string name="paid_on">Paid %s</string>
+
     <!-- Settings Screen -->
     <string name="settings">Settings</string>
     <string name="language">Language</string>

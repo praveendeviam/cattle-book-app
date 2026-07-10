@@ -24,6 +24,35 @@
     <string name="milk_history">பால் வரலாறு</string>
     <string name="no_entries_day">இந்த நாளில் பதிவு இல்லை</string>
 
+    <!-- Add Milk Screen -->
+    <string name="edit_milk_entry">பால் பதிவு திருத்து</string>
+    <string name="date_label">தேதி</string>
+    <string name="session">நேரம்</string>
+    <string name="litres_label">லிட்டர்</string>
+    <string name="note_optional">குறிப்பு — விரும்பினால்</string>
+    <string name="save_entry">பதிவு சேமி</string>
+    <string name="update_entry">பதிவு புதுப்பி</string>
+
+    <!-- Record Payment Screen -->
+    <string name="record_payment">கட்டணம் பதிவு செய்</string>
+    <string name="step_date_range">தேதி வரம்பு தேர்ந்தெடு</string>
+    <string name="step_rate_amount">விலை &amp; தொகை உள்ளிடு</string>
+    <string name="step_payment_date">கட்டண தேதி</string>
+    <string name="from_date">தொடக்க தேதி</string>
+    <string name="to_date">இறுதி தேதி</string>
+    <string name="milk_in_range">வரம்பில் சேகரித்த பால்</string>
+    <string name="rate_per_litre">லிட்டர் விலை (₹)</string>
+    <string name="amount_received">பெறப்பட்ட தொகை (₹)</string>
+    <string name="payment_date">கட்டண தேதி</string>
+    <string name="confirm_close">உறுதிசெய் &amp; காலம் மூடு</string>
+    <string name="close_period_note">இது தற்போதைய காலத்தை மூடி புதியதை தொடங்கும்.</string>
+
+    <!-- Payment History Screen -->
+    <string name="payment_history">கட்டண வரலாறு</string>
+    <string name="no_payments">இன்னும் கட்டணம் பதிவு இல்லை</string>
+    <string name="use_record_to_log">கட்டணம் பதிவு செய்ய பதிவை பயன்படுத்தவும்</string>
+    <string name="paid_on">%s அன்று செலுத்தப்பட்டது</string>
+
     <!-- Settings Screen -->
     <string name="settings">அமைப்புகள்</string>
     <string name="language">மொழி</string>
