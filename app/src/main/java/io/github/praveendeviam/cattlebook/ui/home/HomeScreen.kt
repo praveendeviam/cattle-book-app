@@ -133,7 +133,7 @@ fun HomeScreen(
                     color = Color.White.copy(alpha = 0.20f)
                 ) {
                     Text(
-                        if (currentLang == "en") "EN" else "த",
+                        if (currentLang == "en") "த" else "EN",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
                         fontSize = 13.sp,
