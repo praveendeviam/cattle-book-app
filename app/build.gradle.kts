@@ -1,7 +1,14 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+}
+
+val keystoreProps = Properties().apply {
+    val f = rootProject.file("keystore.properties")
+    if (f.exists()) load(f.inputStream())
 }
 
 android {
@@ -16,13 +23,23 @@ android {
         applicationId = "io.github.praveendeviam.cattlebook"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(keystoreProps["storeFile"] as String)
+            storePassword = keystoreProps["storePassword"] as String
+            keyAlias = keystoreProps["keyAlias"] as String
+            keyPassword = keystoreProps["keyPassword"] as String
+        }
     }
 
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             optimization {
                 enable = false
             }
