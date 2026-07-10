@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.pd.labs.cattlebook"
+    namespace = "io.github.praveendeviam.cattlebook"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.pd.labs.cattlebook"
+        applicationId = "io.github.praveendeviam.cattlebook"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
