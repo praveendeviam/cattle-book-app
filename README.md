@@ -6,9 +6,11 @@ Works fully offline. No sign-in, no internet required. Data is backed up automat
 
 ## Download
 
-Get it on Google Play *(coming soon)* or download the latest APK from the [Releases](https://github.com/praveendeviam/paal-book-app/releases/latest) page.
+**[Download PaalBook-v1.0.0.apk](https://github.com/praveendeviam/paal-book-app/releases/download/v1.0.0/PaalBook-v1.0.0.apk)**
 
-Requires Android 8.0 (API 24) or above.
+Or visit the [Releases page](https://github.com/praveendeviam/paal-book-app/releases/latest) for all versions.
+
+Requires Android 8.0 (API 24) or above. Allow installation from unknown sources when prompted.
 
 ## Features
 
