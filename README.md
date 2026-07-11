@@ -1,40 +1,50 @@
-# CattleBook
+# Paal Book
 
-A simple Android app I built for a dairy farmer to replace their paper diary. Tracks daily milk (morning + evening), calculates earnings, and handles settlement payments.
+A simple Android app built for dairy farmers to replace their paper diary. Tracks daily milk (morning + evening sessions), calculates earnings, and records settlement payments — all in English and Tamil.
 
-Works fully offline. Data is backed up automatically via Google Auto Backup.
+Works fully offline. No sign-in, no internet required. Data is backed up automatically via Google Auto Backup.
 
-## Download & Install
+## Download
 
-1. Go to the [Releases](https://github.com/praveendeviam/cattle-book-app/releases/latest) page
-2. Download **CattleBook-v1.0.0.apk**
-3. Open the APK on your Android phone — if prompted, allow installation from unknown sources
-4. Done, no sign-in or internet needed
+Get it on Google Play *(coming soon)* or download the latest APK from the [Releases](https://github.com/praveendeviam/paal-book-app/releases/latest) page.
 
-Requires Android 8.0 or above.
+Requires Android 8.0 (API 24) or above.
+
+## Features
+
+- **Milk entries** — log morning and evening milk in litres; edit or delete any entry
+- **Dashboard** — pick a date range to see total milk collected and daily average
+- **Record payment** — select a period, enter the rate per litre; amount is auto-calculated
+- **Payment history** — all past settlements listed with dates and amounts
+- **Milk history** — calendar-style view to browse entries day by day
+- **Language** — switch between English and Tamil instantly from the home screen
 
 ## How to use
 
-- **Add entry** — tap the + button, pick morning or evening, enter the litres
-- **Edit / delete** — long press any entry
-- **Summary** — go to the Summary tab, pick a date range to see total milk and earnings
-- **Settlement** — record a payment by entering the rate per litre, the amount is auto-calculated
-- **History** — all past payments are listed under the Payments tab
-- **PIN lock** — set a PIN from Settings if you want to restrict access
-
-## What it does
-
-- Add morning/evening milk entries with litres
-- Edit or delete any entry
-- Pick a date range and see total milk + earnings
-- Record settlements — just enter the rate, it calculates the amount
-- View payment history
-- Optional PIN lock if you don't want others opening it
+- **Add milk** — tap **+ Add Milk**, choose Morning or Evening, enter the litres
+- **Edit / delete** — open History, tap any day, long-press an entry
+- **Record a payment** — tap **Record** tab, set the date range and rate; confirm to close the period
+- **Switch language** — tap the **த / EN** badge in the top-right of the home screen
 
 ## Stack
 
-Kotlin, Jetpack Compose, Room, Hilt
+Kotlin · Jetpack Compose · Material 3 · Room · Navigation Compose · Coroutines · DataStore
 
 ## Build from source
 
-Open in Android Studio, connect a device or start an emulator (Android 8.0+), and hit run.
+```bash
+git clone https://github.com/praveendeviam/paal-book-app.git
+```
+
+Open in Android Studio, connect a device or start an emulator (Android 8.0+), and hit **Run**.
+
+For a signed release build, create `keystore.properties` in the project root:
+
+```
+storeFile=<path-to-your.jks>
+storePassword=<password>
+keyAlias=<alias>
+keyPassword=<password>
+```
+
+Then run `./gradlew bundleRelease`.
