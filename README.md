@@ -6,6 +6,12 @@ Works fully offline. No sign-in, no internet required. Data is backed up automat
 
 ## Download
 
+**Coming soon to Google Play Store!**
+
+Join the closed testing pre-release: **[Try on Google Play](https://play.google.com/store/apps/details?id=io.github.praveendeviam.cattlebook)**
+
+Or download the APK directly:
+
 **[Download PaalBook-v1.0.0.apk](https://github.com/praveendeviam/paal-book-app/releases/download/v1.0.0/PaalBook-v1.0.0.apk)**
 
 Or visit the [Releases page](https://github.com/praveendeviam/paal-book-app/releases/latest) for all versions.
